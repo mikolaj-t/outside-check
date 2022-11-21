@@ -1,4 +1,4 @@
-package me.mikolajt;
+package me.mikolajt.outsidecheck;
 
 public class Main {
     public static void main(String[] args) {
