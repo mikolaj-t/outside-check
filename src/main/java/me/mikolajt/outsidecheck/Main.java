@@ -1,5 +1,11 @@
 package me.mikolajt.outsidecheck;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Main {
     private static void printUsage(String contextText){
         if(contextText.length() > 0){
@@ -12,6 +18,25 @@ public class Main {
                     \t[forecast_type] - daily/hourly forecast
                     \t[city] - city to show the weather of, from those defined in the config file""");
     }
+
+    private static Map<String, CityConfig> readConfigFile(String filepath) throws IOException {
+        Map<String, CityConfig> configMap = new HashMap<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+            String line;
+            while((line = br.readLine()) != null){
+                String[] values = line.split(",");
+                if(values.length != 3) throw new IOException("Incorrect number of variables in a line!");
+
+                String cityName = values[0];
+                String cityLong = values[1];
+                String cityLat = values[2];
+                configMap.put(cityName, new CityConfig(cityLong, cityLat));
+            }
+        }
+
+        return configMap;
+    }
+
     public static void main(String[] args) {
         if(args.length != 4){
             printUsage("Argument count mismatch: %d vs 4".formatted(args.length));
@@ -31,10 +56,12 @@ public class Main {
 
         String city = args[3];
 
-        for(String s : args){
-            StringBuilder sb = new StringBuilder();
-            sb.append("Hello ").append(s).append("!");
-            System.out.println(sb);
+        Map<String, CityConfig> config;
+        try {
+            config = readConfigFile(configPath);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            return;
         }
     }
 }
