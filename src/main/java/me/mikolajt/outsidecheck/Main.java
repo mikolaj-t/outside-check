@@ -30,7 +30,7 @@ public class Main {
                 String cityName = values[0];
                 String cityLong = values[1];
                 String cityLat = values[2];
-                configMap.put(cityName, new CityConfig(cityLong, cityLat));
+                configMap.put(cityName.toUpperCase(), new CityConfig(cityLong, cityLat));
             }
         }
 
@@ -61,6 +61,11 @@ public class Main {
             config = readConfigFile(configPath);
         } catch (IOException e) {
             System.err.println(e.getMessage());
+            return;
+        }
+
+        if(!config.containsKey(city.toUpperCase())){
+            System.err.printf("City is not defined in config: %s%n", city);
             return;
         }
     }
