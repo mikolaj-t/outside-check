@@ -50,18 +50,18 @@ record HourlyForecastData(long dt, double temp, Map<String, Double> rain, Map<St
         var dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
         StringBuilder sb = new StringBuilder();
-        sb.append(dateTimeFormatter.format(date)).append(" ").append(temp).append(" ");
+        sb.append(dateTimeFormatter.format(date)).append(" ").append(temp);
 
         boolean isRaining = rain != null && !rain.isEmpty();
         boolean isSnowing = snow != null && !snow.isEmpty();
         if(isRaining){
-            sb.append(rain.get("1h")).append(" ");
+            sb.append(" ").append(rain.get("1h"));
         }
         if (isSnowing) {
-            sb.append(snow.get("1h")).append("snow ");
+            sb.append(" ").append(snow.get("1h")).append("snow");
         }
         if(!isRaining && !isSnowing){
-            sb.append("unknown");
+            sb.append(" ").append("unknown");
         }
         return sb.toString();
     }
