@@ -20,7 +20,7 @@ public interface OptionsProvider {
             return this.options;
         }
         private Options parseArgs(){
-            if(args.length != 4){
+            if(args.length < 4){
                 printUsage("Argument count mismatch: " + args.length + " vs 4");
                 return null;
             }
@@ -32,7 +32,13 @@ public interface OptionsProvider {
                 printUsage("Incorrect forecast type:" + args[2]);
                 return null;
             }
-            return new Options(args[0], args[1], forecastType, args[3]);
+
+            StringBuilder cityName = new StringBuilder();
+            for(int i=3; i<args.length; i++){
+                cityName.append(args[i]);
+                if(i != args.length-1) cityName.append(" ");
+            }
+            return new Options(args[0], args[1], forecastType, cityName.toString());
         }
         private void printUsage(String contextText){
             if(contextText.length() > 0){
