@@ -1,5 +1,7 @@
 package me.mikolajt.outsidecheck;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -47,7 +49,9 @@ public class Main {
         }
 
         var httpClient = HttpClient.newBuilder().build();
-        fetchApi(httpClient, apiKey, config.get(city.toUpperCase()), forecastType);
+        var response = fetchApi(httpClient, apiKey, config.get(city.toUpperCase()), forecastType);
+        Gson gson = new Gson();
+        unmarshalJsonAndPrint(gson, response, forecastType);
     }
 
     private static void printUsage(String contextText){
@@ -71,29 +75,41 @@ public class Main {
                 if(values.length != 3) throw new IOException("Incorrect number of variables in a line!");
 
                 String cityName = values[0];
-                String cityLong = values[1];
-                String cityLat = values[2];
+                String cityLat = values[1];
+                String cityLong = values[2];
                 configMap.put(cityName.toUpperCase(), new CityConfig(cityLong, cityLat));
             }
         }
 
         return configMap;
     }
-
-    private static void fetchApi(HttpClient client, String apiKey, CityConfig cityConfig, ForecastType forecastType) {
+    private static String fetchApi(HttpClient client, String apiKey, CityConfig cityConfig, ForecastType forecastType) {
         String url = "https://api.openweathermap.org/data/2.5/onecall"
                 + "?lat=" + cityConfig.latitude() + "&lon=" + cityConfig.longitude()
-                + "&exclude=current,minutely,alerts,"
+                + "&units=metric&exclude=current,minutely,alerts,"
                 + ForecastType.theOtherOne(forecastType).toString().toLowerCase()
                 + "&appid=" + apiKey;
-        System.out.println(url);
         try {
             var request = HttpRequest.newBuilder().uri(new URI(url)).GET()
                     .timeout(Duration.of(10, ChronoUnit.SECONDS)).build();
             var response = client.send(request, BodyHandlers.ofString());
-            System.out.println(response.body());
+            return response.body();
         } catch (URISyntaxException | IOException | InterruptedException e) {
             System.err.println(e.getMessage());
+        }
+        return "";
+    }
+
+    private static void unmarshalJsonAndPrint(Gson gson, String json, ForecastType type){
+        switch (type) {
+            case DAILY -> {
+                var forecast = gson.fromJson(json, DailyForecast.class);
+                System.out.println(forecast);
+            }
+            case HOURLY -> {
+                var hourlyForecast = gson.fromJson(json, HourlyForecast.class);
+                System.out.println(hourlyForecast);
+            }
         }
     }
 }
