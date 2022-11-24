@@ -1,4 +1,5 @@
 target/
+*/config.txt
 
 # Compiled class file
 *.class
