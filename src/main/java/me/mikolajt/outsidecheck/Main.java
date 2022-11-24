@@ -25,7 +25,7 @@ public class Main {
 
         ForecastType forecastType;
         try {
-            forecastType = ForecastType.FromString(args[2]);
+            forecastType = ForecastType.fromString(args[2]);
         } catch (IllegalArgumentException e) {
             printUsage("Incorrect forecast type:" + args[2]);
             return;
