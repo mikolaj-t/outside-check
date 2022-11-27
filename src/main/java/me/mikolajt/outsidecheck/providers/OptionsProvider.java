@@ -8,6 +8,12 @@ public interface OptionsProvider {
     record Options(String apiKey, String configPath, ForecastType forecastType, String city) { }
 
     class CliOptionsProvider implements OptionsProvider {
+        public static final String USAGE_MESSAGE = """
+                    Usage: ./outside [api_key] [config_path] [forecast_type] [city]
+                    \t[api_key] - OpenWeather One Call 2.5 API Key
+                    \t[config_path] - path to a configuration CSV file of cities and their coordinates
+                    \t[forecast_type] - daily/hourly forecast
+                    \t[city] - city to show the weather of, from those defined in the config file""";
         private final String[] args;
         private final Options options;
 
@@ -44,12 +50,7 @@ public interface OptionsProvider {
             if(contextText.length() > 0){
                 System.err.println(contextText);
             }
-            System.err.println("""
-                    Usage: ./outside [api_key] [config_path] [forecast_type] [city]
-                    \t[api_key] - OpenWeather One Call 2.5 API Key
-                    \t[config_path] - path to a configuration CSV file of cities and their coordinates
-                    \t[forecast_type] - daily/hourly forecast
-                    \t[city] - city to show the weather of, from those defined in the config file""");
+            System.err.println(USAGE_MESSAGE);
         }
 
     }
