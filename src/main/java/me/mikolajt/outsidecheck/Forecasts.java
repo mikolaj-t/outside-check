@@ -3,6 +3,7 @@ package me.mikolajt.outsidecheck;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Map;
 
 record DailyForecast(DailyForecastData[] daily) {
@@ -13,6 +14,19 @@ record DailyForecast(DailyForecastData[] daily) {
             sb.append(dailyForecast).append(System.lineSeparator());
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DailyForecast forecast = (DailyForecast) o;
+        return Arrays.equals(daily, forecast.daily);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(daily);
     }
 }
 
@@ -40,6 +54,19 @@ record HourlyForecast(HourlyForecastData[] hourly){
             sb.append(hourlyForecast).append(System.lineSeparator());
         }
         return sb.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HourlyForecast that = (HourlyForecast) o;
+        return Arrays.equals(hourly, that.hourly);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(hourly);
     }
 }
 
