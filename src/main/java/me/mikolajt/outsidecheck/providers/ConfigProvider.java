@@ -36,7 +36,7 @@ public interface ConfigProvider {
                     String cityName = values[0];
                     String cityLat = values[1];
                     String cityLong = values[2];
-                    config.configMap.put(cityName.toUpperCase(), new CityConfig(cityLong, cityLat));
+                    config.configMap.put(cityName.toUpperCase(), new CityConfig(cityLat, cityLong));
                 }
                 return config;
             } catch (IOException e) {
