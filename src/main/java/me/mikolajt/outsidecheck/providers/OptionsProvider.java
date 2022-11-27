@@ -9,11 +9,11 @@ public interface OptionsProvider {
 
     class CliOptionsProvider implements OptionsProvider {
         public static final String USAGE_MESSAGE = """
-                    Usage: ./outside [api_key] [config_path] [forecast_type] [city]
-                    \t[api_key] - OpenWeather One Call 2.5 API Key
-                    \t[config_path] - path to a configuration CSV file of cities and their coordinates
-                    \t[forecast_type] - daily/hourly forecast
-                    \t[city] - city to show the weather of, from those defined in the config file""";
+                    Usage: ./outside <api_key> <config_path> <forecast_type> <city>
+                    \tapi_key - OpenWeather One Call 2.5 API Key
+                    \tconfig_path - path to a configuration CSV file of cities and their coordinates
+                    \tforecast_type - (daily|hourly) forecast 
+                    \tcity - city to show the weather of, from those defined in the config file""";
         private final String[] args;
         private final Options options;
 
